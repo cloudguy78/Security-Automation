@@ -1,19 +1,23 @@
-from osimport import subprocess
+import subprocess
 import time
 
 #define the SentinelOne installer path and the device's IP Address
-sentineone_installer_path = 'C:\Users\UserName\Downloads\SentinelOneInstaller.exe'
-device_ip_address = '192.168.1.100' #change this to the IP Iddress of the agent
+s1_installer_path = input(f"Enter SentinelOne Installation Path: ")
+device_ip_address = input(f"Enter IP Address:") #take input for the iP address for the destination endpoint
 
-#define deployment settings
+# Take input for the Token Key
+token_key = input("Enter Token Key: ")
+
+# Define deployment settings
 deployment_settings = {
-    'installation_folder': 'C:\\Program Files\\SentinelOne',
-    'token_key': 'Insert_Token_Key',
-    'console_address': 'https://management.console.address.com',
+    'installation_folder': r'C:\Program Files\SentinelOne',
+    'token_key': token_key,  # Insert the user-provided Token Key
+    'console_address': 'https://usea1-300-mssp.sentinelone.net/',
     'console_port': 443
 }
+
 # Define the command to deploy SentinelOne
-deployment_command = f'{sentinelone_installer_path} /s /v"/qn INSTALLFOLDER={deployment_settings["installation_folder"]} ACTIVATIONKEY={deployment_settings["activation_key"]} CONSOLEADDRESS={deployment_settings["console_address"]} CONSOLEPORT={deployment_settings["console_port"]}"'
+deployment_command = f'{s1_installer_path} /s /v"/qn INSTALLFOLDER={deployment_settings["installation_folder"]} ACTIVATIONKEY={deployment_settings["activation_key"]} CONSOLEADDRESS={deployment_settings["console_address"]} CONSOLEPORT={deployment_settings["console_port"]}"'
 
 # Connect to the device using psexec
 psexec_command = f'psexec \\\\{device_ip_address} -u username -p password cmd /c "{deployment_command}"'
